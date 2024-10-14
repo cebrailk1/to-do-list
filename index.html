@@ -19,18 +19,25 @@
     <h1>To-do-Liste</h1>
     <input type="text" placeholder="input your stuff to-do here" v-model="toDoInput" @change="newInput">
     <ul class="list-group list-group-flush">
+        <p style="margin: 35px" v-if="lazyGuy"> unfinished tasks: </p>
         <li class="list-group-item" v-for="(item,index) in list" :key="index"> <input class="bi bi-check2-square"
                 type="checkbox" v-model="item.checked" @change="taskDone(item,index)"> {{
             item.text }}
         </li>
 
-        <p>Done Tasks: </p>
+        <p style="margin: 35px" v-if=" hardWorking">finished tasks: </p>
 
-        <li class="done-tasks" v-for="(doneItem, index) in doneList" :key="index"><i class="bi bi-check2-square"></i> {{
-            doneItem.text }} </li>
+        <li class="list-group-item" v-for="(doneItem, index) in doneList" :key="index"><i
+                class="bi bi-check2-square"></i> {{
+            doneItem.text }} {{doneItem.checked}} </li>
     </ul>
 
-    <button class="btn btn-danger" @click="deleteAll"><i class="bi bi-trash3"></i> Löschen </button>
+    <button v-if="hardWorking" style="margin: 100px;" class=" btn btn-success" @click="deleteDone"><i
+            class="bi bi-trash3"></i>delete
+        finished tasks</button>
+    <button style="margin: 100px;" class="btn btn-danger" @click="deleteNotDone"><i class="bi bi-trash3"></i>
+        delete unfinished tasks </button>
+
 
 
 </body>

@@ -1,7 +1,16 @@
 body {
   text-align: center;
+  margin: 500px;
+}
+
+#app {
+  margin: 200px;
 }
 
 .done-tasks {
   text-decoration: line-through;
+}
+
+.btn btn-danger {
+  margin: 50px;
 }

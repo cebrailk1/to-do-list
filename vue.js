@@ -8,10 +8,20 @@ createApp({
       doneList: [],
     };
   },
-  computed: {},
+  computed: {
+    hardWorking() {
+      return this.doneList.length > 0;
+    },
+    lazyGuy() {
+      return this.list.length > 0;
+    },
+  },
   methods: {
-    deleteAll() {
+    deleteDone() {
       this.doneList = [];
+    },
+    deleteNotDone() {
+      this.list = [];
     },
     newInput() {
       this.list.push({ text: this.toDoInput, checked: false });

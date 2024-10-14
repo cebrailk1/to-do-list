@@ -10,6 +10,9 @@ createApp({
   },
   computed: {},
   methods: {
+    deleteAll() {
+      this.doneList = [];
+    },
     newInput() {
       this.list.push({ text: this.toDoInput, checked: false });
       this.toDoInput = null;

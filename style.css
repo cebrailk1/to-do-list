@@ -1,0 +1,7 @@
+body {
+  text-align: center;
+}
+
+.done-tasks {
+  text-decoration: line-through;
+}

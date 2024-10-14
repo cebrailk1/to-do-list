@@ -27,11 +27,28 @@ createApp({
       this.list.push({ text: this.toDoInput, checked: false });
       this.toDoInput = null;
     },
+    taskNotDone(doneItem, index) {
+      const completedTask = this.doneList[index];
+      completedTask.checked = false;
+      this.list.push(doneItem);
+      this.doneList.splice(index, 1);
+    },
     taskDone(item, index) {
       const completedTask = this.list[index];
       completedTask.checked = true;
       this.doneList.push(item);
       this.list.splice(index, 1);
+    },
+    saveTasks() {
+      localStorage.setItem("list", JSON.stringify(this.list));
+    },
+    getTasks() {
+      if (localStorage == "") {
+        this.list = [];
+        this.doneList = [];
+      }
+      let save = localStorage.getItem("list");
+      JSON.parse(save);
     },
   },
 }).mount("#app");

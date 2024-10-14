@@ -20,17 +20,22 @@
     <input type="text" placeholder="input your stuff to-do here" v-model="toDoInput" @change="newInput">
     <ul class="list-group list-group-flush">
         <p style="margin: 35px" v-if="lazyGuy"> unfinished tasks: </p>
-        <li class="list-group-item" v-for="(item,index) in list" :key="index"> <input class="bi bi-check2-square"
-                type="checkbox" v-model="item.checked" @change="taskDone(item,index)"> {{
-            item.text }}
+        <li class="list-group-item" v-for="(item,index) in list" :key="index">
+            <input class="bi bi-check2-square" type="checkbox" v-model="item.checked" @change="taskDone(item,index)">
+            {{item.text}}
         </li>
 
         <p style="margin: 35px" v-if=" hardWorking">finished tasks: </p>
 
-        <li class="list-group-item" v-for="(doneItem, index) in doneList" :key="index"><i
-                class="bi bi-check2-square"></i> {{
-            doneItem.text }} {{doneItem.checked}} </li>
+        <li class="list-group-item" v-for="(doneItem, index) in doneList" :key="index">
+            <input class="bi bi-check2-square" type="checkbox" v-model="doneItem.checked"
+                @change="taskNotDone(doneItem,index)">
+            {{doneItem.text}}
+        </li>
     </ul>
+    <button class="btn btn-primary" type="button" @click="saveTasks"><i class="bi bi-floppy"></i></button>
+    <button class="btn btn-secondary" type="button" @click="getTasks"><i class="bi bi-download"></i></button>
+
 
     <button v-if="hardWorking" style="margin: 100px;" class=" btn btn-success" @click="deleteDone"><i
             class="bi bi-trash3"></i>delete

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todolist</title>
+    <script type="module" src="vue.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body id="app">
+    <h1>To-do-Liste</h1>
+    <input type="text" placeholder="input your stuff to-do here" v-model="toDoInput" @change="newInput">
+    <ul>
+        <li v-for="(item,index) in list" :key="index"> <input type="checkbox" v-model="item.checked"
+                @change="taskDone(item,index)" name="" id=""> {{
+            item.text }}
+        </li>
+
+        <p>Done Tasks: </p>
+
+        <li v-for="(doneItem, index) in doneList" :key="index">{{ doneItem.text }} </li>
+    </ul>
+
+
+
+</body>
+
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todolist</title>
+    <script type="module" src="https://unpkg.com/vue@3/dist/vue.esm-browser.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>

@@ -24,19 +24,29 @@
                 aria-expanded="false">
                 <span class="visually-hidden">Toggle Dropdown</span>
             </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#"><input type="text" placeholder="add a new list"
-                            v-model="toDoInput" @change="newInput">
-                    </a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <ul class="dropdown-menu" @click.stop>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <input type="text" placeholder="add a new list" v-model.lazy="storageListInput"
+                            @change="newListInputMeth" @click.stop />
+                    </a>
+                </li>
+                <li class="dropdown-item" @click="handleClick(storageItem)" v-for="(storageItem, index) in storageList"
+                    :key="index">
+                    {{ storageItem.anotherToDoList }}
+                </li>
+                <li><a class="dropdown-item"
+                        href="https://media.makeameme.org/created/you-guessed-right-5c78be.jpg">Something else here</a>
+                </li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="#">Separated link</a></li>
+                <li @click="deleteToDoLists"><a class="dropdown-item">delete all lists</a></li>
             </ul>
         </div>
     </h2>
+
+
     <input type="text" placeholder="input your stuff to-do here" v-model="toDoInput" @change="newInput">
     <ul class="list-group list-group-flush">
         <h2 style="margin: 35px" v-if="lazyGuy"> unfinished tasks: </h2>

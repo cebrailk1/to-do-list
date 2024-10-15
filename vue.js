@@ -6,6 +6,8 @@ createApp({
       toDoInput: null,
       list: [],
       doneList: [],
+      storageListInput: null,
+      storageList: [],
     };
   },
   computed: {
@@ -22,6 +24,9 @@ createApp({
     },
     deleteNotDone() {
       this.list = [];
+    },
+    deleteToDoLists() {
+      this.storageList = [];
     },
     newInput() {
       this.list.push({ text: this.toDoInput, checked: false });
@@ -47,6 +52,13 @@ createApp({
       if (save) {
         this.list = JSON.parse(save);
       }
+    },
+    newListInputMeth() {
+      this.storageList.push({ anotherToDoList: this.storageListInput });
+      this.storageListInput = null;
+    },
+    handleClick(storageItem) {
+      console.log("Item geklickt:", storageItem.anotherToDoList);
     },
   },
 }).mount("#app");

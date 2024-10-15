@@ -1,6 +1,7 @@
 body {
   text-align: center;
   margin: 500px;
+  text-transform: uppercase;
 }
 
 #app {

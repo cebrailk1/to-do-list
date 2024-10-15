@@ -1,4 +1,5 @@
 import { createApp } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+import { emojiMap } from "./emojiMap.js";
 
 createApp({
   data() {
@@ -8,6 +9,7 @@ createApp({
       doneList: [],
       storageListInput: null,
       storageList: [],
+      emoji: "",
     };
   },
   computed: {
@@ -16,6 +18,14 @@ createApp({
     },
     lazyGuy() {
       return this.list.length > 0;
+    },
+    showListComp() {
+      return !this.storageItem < 0;
+    },
+  },
+  watch: {
+    toDoInput() {
+      this.updateEmoji();
     },
   },
   methods: {
@@ -29,8 +39,10 @@ createApp({
       this.storageList = [];
     },
     newInput() {
-      this.list.push({ text: this.toDoInput, checked: false });
+      const emoji = emojiMap[this.toDoInput.toLowerCase()] || "";
+      this.list.push({ text: this.toDoInput, checked: false, emoji: emoji });
       this.toDoInput = null;
+      this.emoji = "";
     },
     taskNotDone(doneItem, index) {
       const completedTask = this.doneList[index];
@@ -54,11 +66,32 @@ createApp({
       }
     },
     newListInputMeth() {
-      this.storageList.push({ anotherToDoList: this.storageListInput });
+      const key = this.storageListInput; // Der Schlüssel wird hier der Input
+      this.storageList.push({ anotherToDoList: key });
+      this.saveList(key); // Speichere nur den Input
       this.storageListInput = null;
     },
+
     handleClick(storageItem) {
-      console.log("Item geklickt:", storageItem.anotherToDoList);
+      console.log("Item geklickt:", storageItem);
+      this.getLists(storageItem);
+    },
+
+    saveList(storageItem) {
+      // Speichert das entsprechende Item mit dem Key als Namen in localStorage
+      localStorage.setItem(storageItem, JSON.stringify(storageItem));
+    },
+
+    getLists(storageItem) {
+      // Holt nur den spezifischen Eintrag mit dem Key aus dem localStorage
+      const savedList = localStorage.getItem(storageItem);
+      if (savedList) {
+        this.storageList = JSON.parse(savedList);
+      }
+    },
+    updateEmoji() {
+      const key = this.toDoInput?.toLowerCase();
+      this.emoji = this.emojiMap[key] || "";
     },
   },
 }).mount("#app");

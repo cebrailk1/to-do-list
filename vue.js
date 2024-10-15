@@ -43,12 +43,10 @@ createApp({
       localStorage.setItem("list", JSON.stringify(this.list));
     },
     getTasks() {
-      if (localStorage == "") {
-        this.list = [];
-        this.doneList = [];
+      const save = localStorage.getItem("list");
+      if (save) {
+        this.list = JSON.parse(save);
       }
-      let save = localStorage.getItem("list");
-      JSON.parse(save);
     },
   },
 }).mount("#app");

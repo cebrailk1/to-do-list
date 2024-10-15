@@ -21,8 +21,8 @@
     <h2>
         <div class="btn-group">
             <button type="button" class="btn btn-info">LISTS</button>
-            <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown"
-                aria-expanded="false" @click="getLists">
+            <button @click="getLists" type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="visually-hidden">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu" @click.stop>
@@ -48,12 +48,12 @@
             </ul>
         </div>
     </h2>
-    <input type="text" placeholder="input your stuff to-do here" v-model="toDoInput" @change="newInput">
+    <input type="text" placeholder="e.g.:  4 banana " v-model=" toDoInput" @change="newInput">
     <ul class="list-group list-group-flush">
         <h2 style="margin: 35px" v-if="lazyGuy"> unfinished tasks: </h2>
         <li class="list-group-item" v-for="(item,index) in list" :key="index">
             <input class="bi bi-check2-square" type="checkbox" v-model="item.checked" @change="taskDone(item,index)">
-            {{item.text}} {{item.emoji}}
+            {{ item.quantity }}x {{ item.text }} {{ item.emoji }}
         </li>
 
         <h2 style="margin: 35px" v-if="hardWorking">finished tasks: </h2>
@@ -62,7 +62,7 @@
             :key="index">
             <input class="bi bi-check2-square" type="checkbox" v-model="doneItem.checked"
                 @change="taskNotDone(doneItem,index)">
-            {{doneItem.text}}
+            {{doneItem.text}} {{doneItem.emoji}}
         </li>
     </ul>
     <button style="margin: 100px;" class="btn btn-primary" type="button" @click="saveTasks"><i

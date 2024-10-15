@@ -19,9 +19,6 @@ createApp({
     lazyGuy() {
       return this.list.length > 0;
     },
-    showListComp() {
-      return !this.storageItem < 0;
-    },
   },
   watch: {
     toDoInput() {
@@ -37,12 +34,6 @@ createApp({
     },
     deleteToDoLists() {
       this.storageList = [];
-    },
-    newInput() {
-      const emoji = emojiMap[this.toDoInput.toLowerCase()] || "";
-      this.list.push({ text: this.toDoInput, checked: false, emoji: emoji });
-      this.toDoInput = null;
-      this.emoji = "";
     },
     taskNotDone(doneItem, index) {
       const completedTask = this.doneList[index];
@@ -89,9 +80,36 @@ createApp({
         this.storageList = JSON.parse(savedList);
       }
     },
-    updateEmoji() {
-      const key = this.toDoInput?.toLowerCase();
-      this.emoji = this.emojiMap[key] || "";
+    newInput() {
+      if (!this.toDoInput) {
+        return; // Keine Eingabe vorhanden, also nichts tun
+      }
+
+      const quantityRegex = /^(\d+)\s*/i; // Muster für "4x" oder "2x"
+      const match = this.toDoInput.match(quantityRegex);
+
+      let quantity = 1;
+      let itemText = this.toDoInput;
+
+      if (match) {
+        quantity = parseInt(match[1], 10); // Menge extrahieren
+        itemText = this.toDoInput.replace(quantityRegex, "").trim(); // Menge entfernen
+      }
+
+      const emoji = this.getEmoji(itemText); // Hole das passende Emoji
+
+      this.list.push({
+        text: itemText,
+        quantity: quantity,
+        emoji: emoji.repeat(quantity), // Emoji entsprechend der Menge wiederholen
+        checked: false,
+      });
+
+      this.toDoInput = null; // Eingabefeld zurücksetzen
+    },
+    getEmoji(itemText) {
+      const lowerCaseText = itemText.toLowerCase();
+      return emojiMap[lowerCaseText] || ""; // Standard-Emoji, falls kein Treffer
     },
   },
 }).mount("#app");

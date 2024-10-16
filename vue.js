@@ -10,6 +10,9 @@ createApp({
       storageListInput: null,
       storageList: [],
       emoji: "",
+      state: {
+        darkmode: false,
+      },
     };
   },
   computed: {
@@ -25,7 +28,16 @@ createApp({
       this.updateEmoji();
     },
   },
+  mounted() {
+    this.$refs.newTaskEl.focus();
+    document.body.dataset.bsTheme = this.state.darkmode ? "dark" : "light";
+  },
+
   methods: {
+    darkmodeSwitch() {
+      this.state.darkmode = !this.state.darkmode;
+      document.body.dataset.bsTheme = this.state.darkmode ? "dark" : "light";
+    },
     deleteDone() {
       this.doneList = [];
     },
@@ -37,14 +49,14 @@ createApp({
     },
     taskNotDone(doneItem, index) {
       const completedTask = this.doneList[index];
-      completedTask.checked = false;
-      this.list.push(doneItem);
+      completedTask.checked = !completedTask;
+      this.list.push(completedTask);
       this.doneList.splice(index, 1);
     },
     taskDone(item, index) {
       const completedTask = this.list[index];
-      completedTask.checked = true;
-      this.doneList.push(item);
+      completedTask.checked = !completedTask;
+      this.doneList.push(completedTask);
       this.list.splice(index, 1);
     },
     saveTasks() {
@@ -57,10 +69,23 @@ createApp({
       }
     },
     newListInputMeth() {
-      const key = this.storageListInput; // Der Schlüssel wird hier der Input
+      const key = this.storageListInput;
       this.storageList.push({ anotherToDoList: key });
-      this.saveList(key); // Speichere nur den Input
+      this.saveList(key);
       this.storageListInput = null;
+    },
+    dragStart(index) {
+      this.draggedItemIndex = index;
+    },
+    drop(index) {
+      const draggedItem = this.list[this.draggedItemIndex];
+      this.list.splice(this.draggedItemIndex, 1);
+      this.list.splice(index, 0, draggedItem);
+      this.saveList();
+    },
+    deleteTask(index) {
+      this.list.splice(index, 1);
+      this.saveList();
     },
 
     handleClick(storageItem) {
@@ -69,12 +94,10 @@ createApp({
     },
 
     saveList(storageItem) {
-      // Speichert das entsprechende Item mit dem Key als Namen in localStorage
       localStorage.setItem(storageItem, JSON.stringify(storageItem));
     },
 
     getLists(storageItem) {
-      // Holt nur den spezifischen Eintrag mit dem Key aus dem localStorage
       const savedList = localStorage.getItem(storageItem);
       if (savedList) {
         this.storageList = JSON.parse(savedList);
@@ -82,34 +105,33 @@ createApp({
     },
     newInput() {
       if (!this.toDoInput) {
-        return; // Keine Eingabe vorhanden, also nichts tun
+        return;
       }
 
-      const quantityRegex = /^(\d+)\s*/i; // Muster für "4x" oder "2x"
+      const quantityRegex = /^(\d+)\s*/i;
       const match = this.toDoInput.match(quantityRegex);
 
       let quantity = 1;
       let itemText = this.toDoInput;
 
       if (match) {
-        quantity = parseInt(match[1], 10); // Menge extrahieren
-        itemText = this.toDoInput.replace(quantityRegex, "").trim(); // Menge entfernen
+        quantity = parseInt(match[1], 10);
+        itemText = this.toDoInput.replace(quantityRegex, "").trim();
       }
 
-      const emoji = this.getEmoji(itemText); // Hole das passende Emoji
-
+      const emoji = this.getEmoji(itemText);
       this.list.push({
         text: itemText,
         quantity: quantity,
-        emoji: emoji.repeat(quantity), // Emoji entsprechend der Menge wiederholen
+        emoji: emoji.repeat(quantity),
         checked: false,
       });
 
-      this.toDoInput = null; // Eingabefeld zurücksetzen
+      this.toDoInput = null;
     },
     getEmoji(itemText) {
       const lowerCaseText = itemText.toLowerCase();
-      return emojiMap[lowerCaseText] || ""; // Standard-Emoji, falls kein Treffer
+      return emojiMap[lowerCaseText] || "";
     },
   },
 }).mount("#app");

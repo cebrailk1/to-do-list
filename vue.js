@@ -55,7 +55,7 @@ createApp({
     },
     taskDone(item, index) {
       const completedTask = this.list[index];
-      completedTask.checked = !completedTask;
+      completedTask.checked = !completedTask.checked;
       this.doneList.push(completedTask);
       this.list.splice(index, 1);
     },
